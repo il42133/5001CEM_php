@@ -67,5 +67,45 @@ class DataBase
     }
 
 }
+    
+    function addActivity($table, $activity, $time)
+    {
+        $activity = $this->prepareData($activity);
+        $time = $this->prepareData($time);
+        $this->sql =
+            "INSERT INTO " . $table . " (activity, time) VALUES ('" . $activity . "','" . $time . "')";
+        if (mysqli_query($this->connect, $this->sql)) {
+            return true;
+        } else return false;
+
+        return $login;
+    }
+    
+    function getUserID($username)
+    {
+        $username = $this->prepareData($username);
+        $result = mysqli_query($con,"SELECT id FROM user_login WHERE username='$username'");
+        return $result;
+    }
+    
+    function getActivityList($username)
+    {
+        $result = "SELECT activity FROM activities WHERE username='$username'";
+        
+        $rows = [];
+        while ($row = mysqli_fetch_array($result))
+        {
+            $rows[] = $row;
+        }
+    }
+    
+    function updatePoints($username, $points)
+    {
+        $current_points = mysqli_query("SELECT points from user_points WHERE username='$username'");
+        $update_points = $current_points + $points;
+        $result = mysqli_query("UPDATE user_points SET points='$update_points' WHERE username='$username'");
+    }
+
+}
 
 ?>
