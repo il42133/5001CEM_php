@@ -7,5 +7,5 @@ if (isset($_POST['fullname']) && isset($_POST['email']) && isset($_POST['usernam
             echo "Sign Up Successful";
         } else echo "Sign up Failed";
     } else echo "Error: Database connection";
-} else echo "All fields are required";
+} else echo "test";
 ?>

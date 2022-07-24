@@ -66,14 +66,14 @@ class DataBase
         } else return false;
     }
 
-}
     
-    function addActivity($table, $activity, $time)
+    function addActivity($table, $activity, $time, $username)
     {
         $activity = $this->prepareData($activity);
+        $username = $this->prepareData($username);
         $time = $this->prepareData($time);
         $this->sql =
-            "INSERT INTO " . $table . " (activity, time) VALUES ('" . $activity . "','" . $time . "')";
+            "INSERT INTO " . $table . " (activity, time, username) VALUES ('" . $activity . "','" . $time . "','" . $username . "')";
         if (mysqli_query($this->connect, $this->sql)) {
             return true;
         } else return false;
