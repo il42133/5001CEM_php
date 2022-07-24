@@ -58,11 +58,17 @@ class DataBase
         $username = $this->prepareData($username);
         $password = $this->prepareData($password);
         $email = $this->prepareData($email);
+        $table2 = "user_points";
+        $zero = 0;
         $password = password_hash($password, PASSWORD_DEFAULT);
         $this->sql =
             "INSERT INTO " . $table . " (fullname, username, password, email) VALUES ('" . $fullname . "','" . $username . "','" . $password . "','" . $email . "')";
         if (mysqli_query($this->connect, $this->sql)) {
-            return true;
+            $this->sql =
+                "INSERT INTO " . $table2 . " (username, points) VALUES ('" . $username . "','" . $zero . "')";
+                if (mysqli_query($this->connect, $this->sql)) {
+                    return true;
+                } else return false;
         } else return false;
     }
 
@@ -81,12 +87,6 @@ class DataBase
         return $login;
     }
     
-    function getUserID($username)
-    {
-        $username = $this->prepareData($username);
-        $result = mysqli_query($con,"SELECT id FROM user_login WHERE username='$username'");
-        return $result;
-    }
     
     function getActivityList($username)
     {
@@ -99,11 +99,20 @@ class DataBase
         }
     }
     
-    function updatePoints($username, $points)
+    function updatePoints($table, $username, $points)
     {
-        $current_points = mysqli_query("SELECT points from user_points WHERE username='$username'");
-        $update_points = $current_points + $points;
-        $result = mysqli_query("UPDATE user_points SET points='$update_points' WHERE username='$username'");
+        $username = $this->prepareData($username);
+        $points = $this->prepareData($points);
+        $this->sql = "select points from " . $table . " where username = '" . $username . "'";
+        $result = mysqli_query($this->connect, $this->sql);
+        $row = mysqli_fetch_assoc($result);
+        if (mysqli_num_rows($result) != 0) {
+            $dbpoints = $row['points'];
+            $update_points = $dbpoints + $points;
+            $this->sql = "UPDATE " . $table . " SET points='" . $update_points . "' where username = '" . $username . "'";
+            $result = mysqli_query($this->connect, $this->sql);
+            return true;
+        } else "User not found";
     }
 
 }

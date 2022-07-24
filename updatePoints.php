@@ -7,5 +7,5 @@ if (isset($_POST['username']) && isset($_POST['points'])) {
             echo "Points added";
         } else echo "Error";
     } else echo "Error: Database connection";
-} else echo "All fields are required";
+} else echo "All fields are required test";
 ?>
